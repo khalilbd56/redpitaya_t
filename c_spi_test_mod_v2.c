@@ -15,7 +15,7 @@
 /* Inline functions definition */
 static int init_spi();
 static int release_spi();
-static int write_spi(int write_data, int size);
+static int write_spi(int* write_data, int size);
 
 /* Constants definition */
 int spi_fd = -1;
@@ -25,11 +25,10 @@ int main(void){
     /* Sample data */
     //char *data = "REDPITAYA SPI TEST";	
 	int dataA [6][1] = {{0x002c8018}, {0x08008029}, {0x00004e42}, {0x000004b3}, {0x00ec803c}, {0x00580005}};
-
-
+	
 	/*******  User added code block     **********/ 
 	/* Write R0~R5 data */
-	for(int i=0, i<=6; ++i){
+	for(int i=0; i<6; ++i){
 		if(write_spi(dataA[i], sizeof(dataA[i])) < 0){
 			printf("Write dataA[%i] to SPI failed. Error: %s\n", i, strerror(errno));
 			return -1;
@@ -88,13 +87,13 @@ static int release_spi(){
 }
 
 /* Write data to the SPI bus */
-static int write_spi(int write_buffer, int size){
+static int write_spi(int* write_buffer, int size){
 
     if(init_spi() < 0){
         printf("Initialization of SPI failed. Error: %s\n", strerror(errno));
         return -1;
     }
-	usleep(100);
+    //usleep(100);
 
     int write_spi = write(spi_fd, write_buffer, size);
 
@@ -102,17 +101,14 @@ static int write_spi(int write_buffer, int size){
         printf("Failed to write to SPI. Error: %s\n", strerror(errno));
         return -1;
     }
-	
-	usleep(100);
+
     /* Release resources */
     if(release_spi() < 0){
         printf("Relase of SPI resources failed, Error: %s\n", strerror(errno));
         return -1;
     }
-	usleep(50);
+    usleep(200);
 
     return 0;
 }
-
-
 
