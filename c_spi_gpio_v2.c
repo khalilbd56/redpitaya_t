@@ -114,8 +114,8 @@ static int write_spi(int* write_buffer, int size){
 	//usleep(200);
 	int errmsg;
 	//set HIGH the GPIO 
-	errmsg = write_gpio(16);
-	errmsg = write_gpio(0);
+	errmsg = write_gpio(16, "");
+	errmsg = write_gpio(0, "");
 	
 	
 	usleep(200);
@@ -134,7 +134,7 @@ int write_gpio(int argc, char *argv[])
 
   errno = 0;
   number = (argc == 2) ? strtol(argv[1], &end, 10) : -1;
-  if(errno != 0 end == argv[1] || number < 0 || number > 255)
+  if(errno != 0 || end == argv[1] || number < 0 || number > 255)
   {
     fprintf(stderr, "Usage: gpio-output [0-255]\n");
     return EXIT_FAILURE;
