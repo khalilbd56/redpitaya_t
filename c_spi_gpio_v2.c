@@ -112,10 +112,10 @@ static int write_spi(int* write_buffer, int size){
         return -1;
     } */
 	//usleep(200);
-	
+	int errmsg;
 	//set HIGH the GPIO 
-	write_gpio(16);
-	write_gpio(0);
+	errmsg = write_gpio(16);
+	errmsg = write_gpio(0);
 	
 	
 	usleep(200);
